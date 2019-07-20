@@ -117,8 +117,8 @@ cc.Class({
             starNode.getComponent(cc.Sprite).spriteFrame = this.pic.getSpriteFrame('star');
             starNode.parent = this.rankRoot;
             starNode.position = cc.v2(0, 0);
-            cc.log(starNode);
-            cc.log(starNode.getComponent(cc.Sprite));
+            // cc.log(starNode);
+            // cc.log(starNode.getComponent(cc.Sprite));
         }
     },
 

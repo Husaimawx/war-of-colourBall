@@ -38,47 +38,49 @@ cc.Class({
         this.rocker.init(this.player);
         this.bulletPool = new cc.NodePool('Bullet');
         this.enemyPool = new cc.NodePool('Enemy');
-        for (let i = 0; i < this.maxBullet; i++) {
-            this.bulletPool.put(cc.instantiate(this.bulletPrefab));
-        }
-        for (let i = 0; i < this.maxBullet; i++) {
-            this.enemyPool.put(cc.instantiate(this.enemyPrefab));
-        }
 
-        this.bulletDT = 0;
-        this.enemyDT = 0;
+        this.schedule(() => {
+            if (this.bulletPool.size() < this.maxBullet) {
+                this.createBullet();
+            }
+        }, this.bulletCD);
+
+        this.schedule(() => {
+            if (this.enemyPool.size() < this.maxEnemy) {
+                this.createEnemy();
+            }
+        }, this.enemyCD);
 
         this.physicsManager = cc.director.getPhysicsManager();
-        // cc.log(this.physicsManager);
         cc.director.getPhysicsManager().enabled = true;
-        this.physicsManager.enabled = true;
+        cc.director.getPhysicsManager().gravity = cc.v2();
         let Bits = cc.PhysicsManager.DrawBits;
         this.physicsManager.debugDrawFlags = Bits.e_aabbBit |
             Bits.e_pairBit |
             Bits.e_centerOfMassBit |
             Bits.e_jointBit |
             Bits.e_shapeBit;
-        cc.director.getPhysicsManager().gravity = cc.v2();
+
+        this.node.once('gameOver', this.gameOver, this);
 
 
-        this.collisionManager = cc.director.getCollisionManager();
-        this.collisionManager.enabled = true;
-        this.collisionManager.enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabled = true;
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
-    update(dt) {
-        this.bulletDT += dt;
-        this.enemyDT += dt;
-        if (this.enemyDT > this.enemyCD) {
-            // cc.log(this.enemyDT);
-            this.createEnemy();
-            this.enemyDT = 0;
-        }
-        if (this.bulletDT > this.bulletCD) {
-            this.createBullet();
-            this.bulletDT = 0;
-        }
-    },
+    // update(dt) {
+    //     this.bulletDT += dt;
+    //     this.enemyDT += dt;
+    //     if (this.enemyDT > this.enemyCD) {
+    //         // cc.log(this.enemyDT);
+    //         this.createEnemy();
+    //         this.enemyDT = 0;
+    //     }
+    //     if (this.bulletDT > this.bulletCD) {
+    //         this.createBullet();
+    //         this.bulletDT = 0;
+    //     }
+    // },
 
     // onCollisionExit(other, self) {
     //     switch (other.node.group) {
@@ -103,51 +105,35 @@ cc.Class({
     // },
 
     createBullet() {
+        cc.log('createBullet');
         if (!this.bulletPool.size()) {
             // cc.log('no avaliable bullet. new one.')
             this.bulletPool.put(cc.instantiate(this.bulletPrefab));
         }
-        let bulletNode = this.bulletPool.get(this, this.bulletPool);
-        bulletNode.getComponent('Bullet').init(this, this.bulletPool);
-        return bulletNode;
+        return this.bulletPool.get(this, this.bulletPool);
+        // bulletNode.getComponent('Bullet').init(this, this.bulletPool);
+        // return bulletNode;
     },
 
     createEnemy() {
-        let enemy = this.enemyPool.get();
-        if (!enemy) {
-            enemy = cc.instantiate(this.enemyPrefab);
+        cc.log('createEnemy');
+        if (!this.enemyPool.size()) {
+            this.enemyPool.put(cc.instantiate(this.enemyPrefab));
         }
-        // cc.log('create enemy');
-        // cc.log(enemy);
-        enemy.getComponent('Enemy').init(this);
+        return this.enemyPool.get(this, this.enemyPool);
+        // return bulletNode;
+        // let enemy = this.enemyPool.get();
+        // if (!enemy) {
+        //     enemy = cc.instantiate(this.enemyPrefab);
+        // }
+        // // cc.log('create enemy');
+        // // cc.log(enemy);
+        // enemy.getComponent('Enemy').init(this);
     },
 
-    // killBullet(node) {
-    //     // cc.log('killbullet')
-    //     node.stopAllActions();
-    //     this.bulletPool.put(node);
-    //     // let bullet = node.getComponent('Bullet');
-    //     // bullet.onKilled(node);
-    // },
-
-    killEnemy(node) {
-        // cc.log('killenemy')
-        // cc.log("Running Action Count: " + node.getNumberOfRunningActions());
-        node.stopAllActions();
-        this.enemyPool.put(node);
-        this.score.totalScore += 1;
+    gameOver() {
+        cc.log('game over call')
+        this.unscheduleAllCallbacks();
     },
-
-    // gameOver() {
-    //     cc.log('gameOver');
-    //     // this.node.emit('gameOver');
-    //     this.enabled = false;
-    //     this.node.stopAllActions();
-    //     // cc.director.getScene().stopAllActions();
-    //     // cc.director.getScene().enabled = false;
-    //     // cc.log('gameOver');
-    //     // this.player.enabled = false;
-    //     // this.player.node.stopAllActions();
-    // },
 
 });
