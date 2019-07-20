@@ -1,22 +1,10 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const Player = require('Player');
 const Rocker = require('Rocker');
 const Score = require('Score');
-// const Bullet = require('Bullet');
-// const Enemy = require('Enemy');
 
 cc.Class({
     extends: cc.Component,
-
     properties: {
         rocker: Rocker,
         player: Player,
@@ -31,26 +19,30 @@ cc.Class({
         bulletCD: 0,
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
     onLoad() {
-        this.player.init();
-        this.rocker.init(this.player);
         this.bulletPool = new cc.NodePool('Bullet');
         this.enemyPool = new cc.NodePool('Enemy');
-
+        cc.log(this.node);
+        // 定时器注册
         this.schedule(() => {
             if (this.bulletPool.size() < this.maxBullet) {
                 this.createBullet();
             }
         }, this.bulletCD);
-
         this.schedule(() => {
             if (this.enemyPool.size() < this.maxEnemy) {
-                this.createEnemy();
+                // this.createEnemy();
             }
         }, this.enemyCD);
+        this.scheduleOnce(function () {
+            for (let i = 0; i < 10; i++) {
+                if (this.enemyPool.size() < this.maxEnemy) {
+                    this.createEnemy(1, cc.Vec2.UP);
+                }
+            }
+        }, 2);
 
+        // 物理系统启动
         this.physicsManager = cc.director.getPhysicsManager();
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2();
@@ -61,74 +53,51 @@ cc.Class({
             Bits.e_jointBit |
             Bits.e_shapeBit;
 
+        // 事件注册
+        this.node.on('mergeEnemy', this.mergeEnemy, this);
         this.node.once('gameOver', this.gameOver, this);
 
-
-        // cc.director.getCollisionManager().enabled = true;
-        // cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
-    // update(dt) {
-    //     this.bulletDT += dt;
-    //     this.enemyDT += dt;
-    //     if (this.enemyDT > this.enemyCD) {
-    //         // cc.log(this.enemyDT);
-    //         this.createEnemy();
-    //         this.enemyDT = 0;
-    //     }
-    //     if (this.bulletDT > this.bulletCD) {
-    //         this.createBullet();
-    //         this.bulletDT = 0;
-    //     }
-    // },
-
-    // onCollisionExit(other, self) {
-    //     switch (other.node.group) {
-    //         case 'Bullet':
-    //             // cc.log('collision bullet');
-    //             this.bulletPool.put(node);
-    //             // this.killBullet(other.node);
-    //     }
-    // },
-
-    // reuse() {
-    //     cc.log('bullet or enemy on get call reuse');
-    //     this.node.on('gameOver', this.gameOver, this)
-    // },
-
-    // unuse() {
-    //     cc.log('bullet or enemy on put call unuse');
-    //     this.node.off('gameOver', () => {
-    //         this.node.stopAllActions();
-    //         this.enabled = false;
-    //     }, this)
-    // },
+    onDestroy() {
+        this.node.off('mergeEnemy', this.mergeEnemy, this);
+        this.node.off('gameOver', this.gameOver, this);
+    },
 
     createBullet() {
-        cc.log('createBullet');
         if (!this.bulletPool.size()) {
-            // cc.log('no avaliable bullet. new one.')
             this.bulletPool.put(cc.instantiate(this.bulletPrefab));
         }
         return this.bulletPool.get(this, this.bulletPool);
-        // bulletNode.getComponent('Bullet').init(this, this.bulletPool);
-        // return bulletNode;
     },
 
-    createEnemy() {
-        cc.log('createEnemy');
+    createEnemy(level = 1, pos = null) {
         if (!this.enemyPool.size()) {
             this.enemyPool.put(cc.instantiate(this.enemyPrefab));
         }
-        return this.enemyPool.get(this, this.enemyPool);
-        // return bulletNode;
-        // let enemy = this.enemyPool.get();
-        // if (!enemy) {
-        //     enemy = cc.instantiate(this.enemyPrefab);
-        // }
-        // // cc.log('create enemy');
-        // // cc.log(enemy);
-        // enemy.getComponent('Enemy').init(this);
+        return this.enemyPool.get(this, this.enemyPool, level, pos);
+    },
+
+    mergeEnemy(a, b) {
+        // cc.log(a.uuid + 'want to merge');
+        if (!a || !b) {
+            return;
+        }
+        let enemyA = a.getComponent('Enemy');
+        let enemyB = b.getComponent('Enemy');
+        cc.log('can merge');
+        // cc.log(a);
+        // cc.log(b);
+        // let level = a.getComponent('Enemy').level + b.getComponent('Enemy').level;
+        // level = level === 0 ? 1 : level;
+        // this.enemyPool.put(a);
+        if(a.getScale() < b.getScale()) {
+            a.position = b.position;
+        }
+        a.setScale(a.getScale() + b.getScale());
+        enemyA.level += enemyB.level;
+        this.enemyPool.put(b);
+        // this.createEnemy(level, pos);
     },
 
     gameOver() {
