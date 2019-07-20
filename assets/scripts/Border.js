@@ -34,6 +34,7 @@ cc.Class({
 
     onLoad() {
         this.canvas = cc.find('Canvas');
+        // cc.log(this.rigidbody);
         // cc.log(this.node);
         // cc.log(this.node.getComponent(cc.Graphics));
         // cc.log(this.graphics);

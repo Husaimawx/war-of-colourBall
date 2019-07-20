@@ -33,11 +33,17 @@ let Player = cc.Class({
 
         //bullet
         this.fireDT = 0;
+
+        this.node.parent.once('gameOver', () => {
+            cc.log('player on gameOver call');
+            this.enabled = false;
+            this.node.stopAllActions();
+        }, this);
     },
 
     onDestroy() {
+        // this.node.parent.off('gameOver');
     },
-
 
     update(dt) {
         this.prePos = this.node.position.clone();
@@ -55,14 +61,25 @@ let Player = cc.Class({
         }
 
         //fire
-        this.fireDT += dt;
-        if (this.fireDT >= this.fireCD) {
-            // cc.log(this.fireDT);
-            this.game.createBullet();
-            this.fireDT = 0;
-        }
+        // this.fireDT += dt;
+        // if (this.fireDT >= this.fireCD) {
+        //     // cc.log(this.fireDT);
+        //     this.game.createBullet();
+        //     this.fireDT = 0;
+        // }
 
-        this.game.posCheck(this.node);
+        // this.game.posCheck(this.node);
+    },
+
+    onBeginContact(contact, selfCollider, otherCollider) {
+        cc.log('contact player');
+        cc.log(selfCollider);
+        cc.log(otherCollider);
+        // if (otherCollider.node.group === 'Border') {
+        if (otherCollider.node.group === 'Enemy') {
+            this.game.node.emit('gameOver');
+            // this.game.gameOver();
+        }
     },
 
 });
