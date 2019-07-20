@@ -10,8 +10,9 @@
 
 const Player = require('Player');
 const Rocker = require('Rocker');
-const Bullet = require('Bullet');
-const Enemy = require('Enemy');
+const Score = require('Score');
+// const Bullet = require('Bullet');
+// const Enemy = require('Enemy');
 
 cc.Class({
     extends: cc.Component,
@@ -19,11 +20,15 @@ cc.Class({
     properties: {
         rocker: Rocker,
         player: Player,
+        score: Score,
         bulletPrefab: cc.Prefab,
         enemyPrefab: cc.Prefab,
-        
+
         maxBullet: 0,
         maxEnemy: 0,
+
+        enemyCD: 0,
+        bulletCD: 0,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -31,84 +36,104 @@ cc.Class({
     onLoad() {
         this.player.init();
         this.rocker.init(this.player);
-        this.bulletPool = new cc.NodePool();
-        for (let i = 0; i < this.maxBullet; i++) {
-            let bullet = cc.instantiate(this.bulletPrefab);
-            this.bulletPool.put(bullet);
-        }
-        this.enemyPool = new cc.NodePool();
-        for (let i = 0; i < this.maxBullet; i++) {
-            let enemy = cc.instantiate(this.enemyPrefab);
-            this.enemyPool.put(enemy);
-        }
+        this.bulletPool = new cc.NodePool('Bullet');
+        this.enemyPool = new cc.NodePool('Enemy');
 
-        cc.director.setScheduler()
+        this.schedule(() => {
+            if (this.bulletPool.size() < this.maxBullet) {
+                this.createBullet();
+            }
+        }, this.bulletCD);
 
-        this.collisionManager = cc.director.getCollisionManager();
-        this.collisionManager.enabled = true;
-        this.collisionManager.enabledDebugDraw = true;
+        this.schedule(() => {
+            if (this.enemyPool.size() < this.maxEnemy) {
+                this.createEnemy();
+            }
+        }, this.enemyCD);
+
+        this.physicsManager = cc.director.getPhysicsManager();
+        cc.director.getPhysicsManager().enabled = true;
+        cc.director.getPhysicsManager().gravity = cc.v2();
+        let Bits = cc.PhysicsManager.DrawBits;
+        this.physicsManager.debugDrawFlags = Bits.e_aabbBit |
+            Bits.e_pairBit |
+            Bits.e_centerOfMassBit |
+            Bits.e_jointBit |
+            Bits.e_shapeBit;
+
+        this.node.once('gameOver', this.gameOver, this);
+
+
+        // cc.director.getCollisionManager().enabled = true;
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
-    posCheck(node) {
-        if (node.x < - this.node.width / 2) {
-            // cc.log('meet at left');
-            node.x = - this.node.width / 2;
-        }
-        if (node.x > this.node.width / 2) {
-            // cc.log('meet at right');
-            node.x = this.node.width / 2;
-        }
-        if (node.y < - this.node.height / 2) {
-            // cc.log('meet at bottom');
-            node.y = - this.node.height / 2;
-        }
-        if (node.y > this.node.height / 2) {
-            // cc.log('meet at top');
-            node.y = this.node.height / 2;
-        }
-    },
+    // update(dt) {
+    //     this.bulletDT += dt;
+    //     this.enemyDT += dt;
+    //     if (this.enemyDT > this.enemyCD) {
+    //         // cc.log(this.enemyDT);
+    //         this.createEnemy();
+    //         this.enemyDT = 0;
+    //     }
+    //     if (this.bulletDT > this.bulletCD) {
+    //         this.createBullet();
+    //         this.bulletDT = 0;
+    //     }
+    // },
 
-    onCollisionExit(other, self) {
-        switch (other.node.group) {
-            case 'Bullet':
-                // cc.log('collision bullet');
-                this.killBullet(other.node);
-        }
-    },
+    // onCollisionExit(other, self) {
+    //     switch (other.node.group) {
+    //         case 'Bullet':
+    //             // cc.log('collision bullet');
+    //             this.bulletPool.put(node);
+    //             // this.killBullet(other.node);
+    //     }
+    // },
+
+    // reuse() {
+    //     cc.log('bullet or enemy on get call reuse');
+    //     this.node.on('gameOver', this.gameOver, this)
+    // },
+
+    // unuse() {
+    //     cc.log('bullet or enemy on put call unuse');
+    //     this.node.off('gameOver', () => {
+    //         this.node.stopAllActions();
+    //         this.enabled = false;
+    //     }, this)
+    // },
 
     createBullet() {
-        let bullet = this.bulletPool.get();
-        if (!bullet) {
-            cc.log('no avaliable bullet. new one.')
-            bullet = cc.instantiate(this.bulletPrefab);
+        cc.log('createBullet');
+        if (!this.bulletPool.size()) {
+            // cc.log('no avaliable bullet. new one.')
+            this.bulletPool.put(cc.instantiate(this.bulletPrefab));
         }
-        // cc.log(bullet.getComponent('Bullet').direction);
-        bullet.getComponent('Bullet').init(this);
-        // cc.log(bullet.getComponent('Bullet').direction);
-    },
-
-    killBullet(node) {
-        // cc.log('killbullet')
-        cc.log("Running Action Count: " + node.getNumberOfRunningActions());
-        node.stopAllActions();
-        this.bulletPool.put(node);
+        return this.bulletPool.get(this, this.bulletPool);
+        // bulletNode.getComponent('Bullet').init(this, this.bulletPool);
+        // return bulletNode;
     },
 
     createEnemy() {
-        let enemy = this.enemyPool.get();
-        if (!enemy) {
-            enemy = cc.instantiate(this.enemyPrefab);
+        cc.log('createEnemy');
+        if (!this.enemyPool.size()) {
+            this.enemyPool.put(cc.instantiate(this.enemyPrefab));
         }
-        enemy.getComponent('Enemy').init(this);
+        return this.enemyPool.get(this, this.enemyPool);
+        // return bulletNode;
+        // let enemy = this.enemyPool.get();
+        // if (!enemy) {
+        //     enemy = cc.instantiate(this.enemyPrefab);
+        // }
+        // // cc.log('create enemy');
+        // // cc.log(enemy);
+        // enemy.getComponent('Enemy').init(this);
     },
 
-    killEnemy(node) {
-        // cc.log('killenemy')
-        cc.log("Running Action Count: " + node.getNumberOfRunningActions());
-        node.stopAllActions();
-        this.enemyNode.put(node);
+    gameOver() {
+        cc.log('game over call')
+        this.unscheduleAllCallbacks();
     },
-
-
 
 });

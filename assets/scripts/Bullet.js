@@ -3,23 +3,50 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        speed: 0, // 100 px per second
-        // direction: new cc.Vec2(),
+        speed: 0, // __ px per second
     },
 
-    init(game) {
-        let player = game.player;
+    reuse(game, pool) {
+        cc.log('bullet reuse');
+        this.enabled = true;
+        this.game = game;
+        this.pool = pool;
         this.node.parent = game.node;
-        this.radius = this.node.width / 2;
-        this.direction = player.direction.clone();
+        this.node.parent.once('gameOver', this.amnesia, this);
 
-        this.node.position = cc.v2(
-            player.node.width * player.node.scaleX / 2 * this.direction.x + 10,
-            player.node.height * player.node.scaleY / 2 * this.direction.y + 10
-        ).add(player.node.position)
-
-        let action = cc.repeatForever(cc.moveBy(1, this.direction.mulSelf(this.speed)));
+        //set direction and position 
+        let playerNode = game.player.node;
+        let direction = game.player.direction.clone();
+        let action = cc.repeatForever(cc.moveBy(1, direction.mul(this.speed)));
         this.node.runAction(action);
+        // cc.log('direction');
+        // cc.log(direction);
+        // cc.log('game.player.direction');
+        // cc.log(game.player.direction);
+        // cc.log(this.node);
+        this.node.position = cc.v2(
+            playerNode.width * playerNode.scaleX / 2 * direction.x + 10,
+            playerNode.height * playerNode.scaleY / 2 * direction.y + 10
+        ).add(playerNode.position)
+        // cc.log(playerNode);
+        // cc.log(this.node);
+    },
+
+    unuse() {
+        cc.log('bullet unuse');
+        this.amnesia();
+        // this.node.parent.off('gameOver', this.amnesia, this.node);
+    },
+
+    amnesia() {
+        // 失忆  回炉重造之孟婆汤
+        this.node.stopAllActions();
+        this.enabled = false;
+    },
+
+
+    onBeginContact(contact, selfCollider, otherCollider) {
+        this.pool.put(selfCollider.node);
     },
 
 });
