@@ -3,27 +3,57 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        text: cc.Label,
+        text1: cc.Label,
+        text2: cc.Label,
         medalRoot: cc.Node,
         medalBaseLine: 0,
         pic: cc.SpriteAtlas,
+        scoreNow: 0,
+        oldScore: 0,
     },
 
-    onLoad() {
-        this.scoreNow = 0,
-        this.oldScore = 0;
-        this.text.string = `Score: ${this.scoreNow}`;
-        this.medalPool = new cc.NodePool('Medal');
-        this.medalGap = 50;
+    init() {
+        this.canvas = cc.find('Canvas');
+        this.game = this.canvas.getComponent('Game');
+        this.text1.string = `Score: `;
+        this.text2.string = `           ${this.scoreNow}`;
+        // this.medalPool = new cc.NodePool('Medal');
+        // this.medalGap = 50;
+        this.action = cc.sequence(
+            cc.scaleTo(0.15, 1.25),
+            cc.scaleTo(0.35, 1)
+        );
+    },
+
+    dispatch(action) {
+        switch (action.type) {
+            case 'ADD':
+                this.addScore(action.score);
+                break;
+        }
+    },
+
+    addScore(score = 1) {
+        this.scoreNow += score;
+        if (Math.floor(this.oldScore / 5) !== Math.floor(this.scoreNow / 5)) {
+            this.game.bonusManager.dispatch({
+                type: 'BOOM'
+            });
+        }
     },
 
     update(dt) {
         if (this.oldScore === this.scoreNow) {
             return;
         }
-        this.text.string = `Score: ${this.scoreNow}`;
-        this.recycleAllMedals();
-        this.renderMedals();
+        this.node.stopAllActions();
+
+        this.text2.string = `           ${this.scoreNow}`;
+        if (this.scoreNow - this.oldScore > 10) {
+            this.text2.node.runAction(this.action);
+        }
+        // this.recycleAllMedals();
+        // this.renderMedals();
         this.oldScore = this.scoreNow;
     },
 
@@ -67,14 +97,9 @@ cc.Class({
     },
 
     recycleAllMedals() {
-        cc.log('recycle medalPool size: ' + this.medalPool.size());
-        cc.log('medalRoot.children: ' + this.medalRoot.children.length);
-        cc.log(this.medalRoot.children);
         for (let r of this.medalRoot.children) {
             this.medalPool.put(r);
         }
-        cc.log('after recycle medalRoot.children: ' + this.medalRoot.children.length);
-        cc.log('after recycle: ' + this.medalPool.size());
     },
 
 });

@@ -4,36 +4,28 @@ cc.Class({
     properties: {
         background: cc.Node,
         dot: cc.Node,
-        bgRaduis: 0,
     },
 
-    onLoad() {
-        this.bgRaduis = this.background.width * this.background.scaleX / 2;
+    init() {
+        this.canvas = cc.find('Canvas');
+        this.game = this.canvas.getComponent('Game');
+        this.player = this.game.player;
+
+        this.node.parent = this.canvas;
         this.node.active = false;
-        this.player = this.node.parent.getComponent('Game').player;
+        this.bgRaduis = this.background.width * this.background.scaleX / 2;
 
         //事件注册
-        this.node.parent.on('touchstart', this.handleTouchStart, this);
-        this.node.parent.on('touchmove', this.handleTouchMove, this);
-        this.node.parent.on('touchend', this.handleTouchEnd, this);
-        this.node.parent.once('gameOver', this.destroy, this);
-    },
-
-    onDestroy() {
-        this.node.active = false;
-
-        //事件反注册
-        this.node.parent.off('touchstart', this.handleTouchStart, this);
-        this.node.parent.off('touchmove', this.handleTouchMove, this);
-        this.node.parent.off('touchend', this.handleTouchEnd, this);
-        this.node.parent.off('gameOver', this.destroy, this);
+        this.canvas.on('touchstart', this.handleTouchStart, this);
+        this.canvas.on('touchmove', this.handleTouchMove, this);
+        this.canvas.on('touchend', this.handleTouchEnd, this);
     },
 
     touchAtCanvas(touchAtGlobal) {
         return new cc.Vec2(
             touchAtGlobal.x - this.node.parent.width / 2,
             touchAtGlobal.y - this.node.parent.height / 2
-        )
+        );
     },
 
     handleTouchStart(eventTouch) {
@@ -41,15 +33,6 @@ cc.Class({
         this.node.setPosition(touchAt); //受父亲node.parent的anchor影响，相对于屏幕中心
         this.dot.setPosition(0, 0);
         this.node.active = true;
-
-        // 设置player方向
-        // let playerPos = this.player.node.position;
-        // let distance = touchAt.sub(playerPos);
-        // if (!distance.equals(cc.Vec2.ZERO)) {
-        //     cc.log(this.player.direction);
-        //     this.player.direction = distance.normalizeSelf();
-        //     cc.log(this.player.direction);
-        // }
     },
 
     handleTouchMove(eventTouch) {
@@ -71,16 +54,25 @@ cc.Class({
 
         // 设置player方向
         if (!distance.equals(cc.Vec2.ZERO)) {
-            this.player.direction = distance.normalizeSelf();
+            this.player.dispatch({
+                type: 'SET_DIRECTION',
+                direction: distance.normalizeSelf()
+            });
         }
 
         this.node.active = true;
-        this.player.isMoving = true;
+        this.player.dispatch({
+            type: 'SET_IS_MOVING',
+            isMoving: true
+        });
     },
 
     handleTouchEnd() {
         this.node.active = false;
-        this.player.isMoving = false;
+        this.player.dispatch({
+            type: 'SET_IS_MOVING',
+            isMoving: false
+        });
     },
 
 });
