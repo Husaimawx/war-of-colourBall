@@ -11,10 +11,10 @@ cc.Class({
 
     update(dt) {
         if (this.invincible) {
+            this.rigiBody.linearVelocity = cc.Vec2.ZERO;
             return;
         }
         let targetNode = this.manager.target.node;
-        let rigiBody = this.node.getComponent(cc.RigidBody);
         let distance = targetNode.position.sub(this.node.position);
         let direction = distance.clone().normalizeSelf();
         let realSpeed = this.speed;
@@ -22,22 +22,20 @@ cc.Class({
         if (shouldDamping < 1) {
             realSpeed *= 0.7 * shouldDamping + 0.3;
         }
-        rigiBody.linearVelocity = direction.mul(realSpeed);
-    },
-
-    onDestroy() {
-        this.unscheduleAllCallbacks();
+        this.rigiBody.linearVelocity = direction.mul(realSpeed);
     },
 
     reuse(manager, level, invincible) {
+        this.collider = this.node.getComponent(cc.PhysicsCircleCollider);
+        this.graphics = this.node.addComponent(cc.Graphics);
+        this.rigiBody = this.node.getComponent(cc.RigidBody);
         this.enabled = true;
         this.node.active = true;
         this.manager = manager;
         this.level = level;
         this.invincible = invincible;
+        this.rigiBody.linearVelocity = cc.Vec2.ZERO;
         this.color = this.manager.randomColor();
-        this.collider = this.node.getComponent(cc.PhysicsCircleCollider);
-        this.graphics = this.node.addComponent(cc.Graphics);
         this.radius = this.baseRadius + this.level;
 
         if (invincible) {
@@ -49,6 +47,7 @@ cc.Class({
         this.enabled = false;
         this.node.active = false;
         this.node.stopAllActions();
+        this.unscheduleAllCallbacks();
     },
 
     setInitAction() {

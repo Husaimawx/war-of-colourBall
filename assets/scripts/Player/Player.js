@@ -10,6 +10,9 @@ let Player = cc.Class({
         this.canvas = cc.find('Canvas');
         this.game = this.canvas.getComponent('Game');
         this.direction = cc.Vec2.UP;
+        // this.collider = this.node.getComponent(cc.PhysicsPolygonCollider);
+        // cc.log(this.collider);
+        // this.collider.restitution = 0;
     },
 
     dispatch(action) {
@@ -36,21 +39,12 @@ let Player = cc.Class({
     },
 
     onBeginContact(contact, selfCollider, otherCollider) {
-        cc.log(selfCollider.node);
-        cc.log(otherCollider.node);
         switch (otherCollider.node.group) {
             case 'Enemy':
                 this.game.dispatch({
                     type: 'GAME_OVER'
                 })
                 break;
-            // case 'Tool':
-            //     if (otherCollider.node.name === 'BoomTool') {
-            //         this.game.bonusManager.dispatch({
-            //             type: 'BOOM',
-            //         })
-            //     }
-            //     break;
             default: break;
         }
     },

@@ -6,11 +6,11 @@ cc.Class({
         inTime: 1.5,
     },
 
-    reuse(manager) {
+    reuse(manager, parent) {
         this.enabled = true;
         this.manager = manager;
-        this.collider = this.node.getComponent(cc.PhysicsCircleCollider);
-        this.collider.enabled = false;
+        this.node.parent = parent;
+        this.node.position = cc.v2(-100, -100);
         let action = cc.sequence(
             cc.place(cc.v2(-100, -100)),
             cc.moveTo(this.inTime, cc.Vec2.ZERO).easing(cc.easeCubicActionOut())
@@ -21,6 +21,10 @@ cc.Class({
                 type: 'RECYCLE/AIM',
                 node: this.node
             });
+            this.manager.game.enemyManager.dispatch({
+                type: 'KILL_ENEMY',
+                node: parent
+            })
         }, this.inTime)
     },
 

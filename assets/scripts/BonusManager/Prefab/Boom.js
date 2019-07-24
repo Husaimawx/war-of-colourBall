@@ -10,9 +10,10 @@ cc.Class({
         this.node.position = cc.Vec2.ZERO;
     },
 
-    reuse(manager) {
+    reuse(manager, parent) {
         this.enabled = true;
         this.manager = manager;
+        this.node.parent = parent;
         let fadein = cc.fadeIn(this.inTime);
         let fadeout = cc.fadeOut(this.outTime);
         let action = cc.sequence(fadein, fadeout);
@@ -31,14 +32,4 @@ cc.Class({
         this.unscheduleAllCallbacks();
     },
 
-    onBeginContact(contact, selfCollider, otherCollider) {
-        switch (otherCollider.node.group) {
-            case 'Enemy':
-                this.manager.game.score.dispatch({
-                    type: 'ADD',
-                    score: otherCollider.node.getComponent('Enemy').level
-                })
-                break;
-        }
-    },
 });

@@ -25,7 +25,7 @@ cc.Class({
         ]
         this.schedule(() => {
             if (this.enemys.length < this.maxEnemy) {
-                this.dispatch({type: 'CREATE_ENEMY'});
+                this.dispatch({ type: 'CREATE_ENEMY' });
             }
         }, this.enemyCD);
     },
@@ -66,19 +66,23 @@ cc.Class({
             return e.uuid !== node.uuid;
         })
         this.enemyPool.put(node);
+        this.game.score.dispatch({
+            type: 'ADD',
+            score: node.getComponent('Enemy').level
+        })
     },
 
-    mergeEnemy(node1, node2) {
-        if (!node1 || !node2 || node1.uuid < node2.uuid) {
-            return;
-        }
-        let level1 = node1.getComponent('Enemy').level;
-        let level2 = node1.getComponent('Enemy').level;
-        let pos = level1 > level2 ? node1.position : node1.position;
-        this.killEnemy(node1);
-        this.killEnemy(node1);
-        this.createEnemy(level1 + level2, pos, false);
-    },
+    // mergeEnemy(node1, node2) {
+    //     if (!node1 || !node2 || node1.uuid < node2.uuid) {
+    //         return;
+    //     }
+    //     let level1 = node1.getComponent('Enemy').level;
+    //     let level2 = node1.getComponent('Enemy').level;
+    //     let pos = level1 > level2 ? node1.position : node1.position;
+    //     this.killEnemy(node1);
+    //     this.killEnemy(node1);
+    //     this.createEnemy(level1 + level2, pos, false);
+    // },
 
     randomColor() {
         let randomNumb = Math.floor(Math.random() * this.enemyColor.length);

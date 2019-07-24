@@ -46,14 +46,21 @@ cc.Class({
     fire(action) {
         switch (action.type.split('/')[1]) {
             case 'BOOM': {
-                let node = this.create(this.boomPool, this.boom);
-                node.setParent(this.game.player.node);
+                let node = this.create(
+                    this.boomPool,
+                    this.boom,
+                    this.game.player.node
+                );
                 break;
             }
             case 'AIM': {
-                for (let e of this.game.enemyManager.enemys) {
-                    let aimNode = this.create(this.aimPool, this.aim);
-                    aimNode.setParent(e);
+                for (let eNode of this.game.enemyManager.enemys) {
+                    let e = eNode.getComponent('Enemy');
+                    if (e.invincible) {
+                        return;
+                    }
+                    e.invincible = true;
+                    let aimNode = this.create(this.aimPool, this.aim, eNode);
                 }
                 break;
             }
@@ -89,11 +96,11 @@ cc.Class({
         }
     },
 
-    create(pool, prefab) {
+    create(pool, prefab, ...args) {
         if (!pool.size()) {
             pool.put(cc.instantiate(prefab));
         }
-        return pool.get(this);
+        return pool.get(this, ...args);
     },
 
     createTool(pool, prefab) {

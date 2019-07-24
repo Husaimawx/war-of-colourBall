@@ -17,8 +17,6 @@ cc.Class({
         this.game = this.canvas.getComponent('Game');
         this.text1.string = `Score: `;
         this.text2.string = `           ${this.scoreNow}`;
-        // this.medalPool = new cc.NodePool('Medal');
-        // this.medalGap = 50;
         this.action = cc.sequence(
             cc.scaleTo(0.15, 1.25),
             cc.scaleTo(0.35, 1)
@@ -37,7 +35,7 @@ cc.Class({
         this.scoreNow += score;
         if (Math.floor(this.oldScore / 5) !== Math.floor(this.scoreNow / 5)) {
             this.game.bonusManager.dispatch({
-                type: 'BOOM'
+                type: 'FIRE/BOOM'
             });
         }
     },
