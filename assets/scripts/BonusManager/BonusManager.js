@@ -24,10 +24,7 @@ cc.Class({
         this.bonus = ['BOOM', 'AIM'];
 
         this.schedule(() => {
-            if (this.toolNumb < this.maxTool) {
-                let numb = Math.floor((Math.random() * this.bonus.length));
-                this.dispatch({ type: `FIRE/${this.bonus[numb]}_TOOL` });
-            }
+            this.randomTool();
         }, this.toolCD);
     },
 
@@ -43,34 +40,58 @@ cc.Class({
         }
     },
 
+    randomTool() {
+        if (this.toolNumb < this.maxTool) {
+            let numb = Math.floor((Math.random() * this.bonus.length));
+            this.dispatch({ type: `FIRE/${this.bonus[numb]}_TOOL` });
+        }
+    },
+
     fire(action) {
         switch (action.type.split('/')[1]) {
-            case 'BOOM': {
-                let node = this.create(
-                    this.boomPool,
-                    this.boom,
-                    this.game.player.node
-                );
+            case 'BOOM':
+                this.fireBoom();
                 break;
-            }
-            case 'AIM': {
-                for (let eNode of this.game.enemyManager.enemys) {
-                    let e = eNode.getComponent('Enemy');
-                    if (e.invincible) {
-                        return;
-                    }
-                    e.invincible = true;
-                    let aimNode = this.create(this.aimPool, this.aim, eNode);
-                }
+            case 'AIM':
+                this.fireAim();
                 break;
-            }
-            case 'BOOM_TOOL': { }
+            case 'BOOM_TOOL':
                 this.createTool(this.boomToolPool, this.boomTool);
                 break;
             case 'AIM_TOOL':
                 this.createTool(this.aimToolPool, this.aimTool);
                 break;
+            case 'RANDOM_TOOL':
+                this.randomTool();
+                break;
             default: cc.error('UNCLEAR ACTION: ' + aciton.type);
+        }
+    },
+
+    fireBoom() {
+        let node = this.create(
+            this.boomPool,
+            this.boom,
+            this.game.player.node
+        );
+        this.schedule(() => {
+            let node = this.create(
+                this.boomPool,
+                this.boom,
+                this.canvas
+            );
+            node.position = this.game.randomPos();
+        }, 0.5, 4, 0.5);
+    },
+
+    fireAim() {
+        for (let eNode of this.game.enemyManager.enemys) {
+            let e = eNode.getComponent('Enemy');
+            if (e.invincible) {
+                return;
+            }
+            e.invincible = true;
+            let aimNode = this.create(this.aimPool, this.aim, eNode);
         }
     },
 

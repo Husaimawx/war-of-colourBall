@@ -35,7 +35,7 @@ cc.Class({
         this.scoreNow += score;
         if (Math.floor(this.oldScore / 5) !== Math.floor(this.scoreNow / 5)) {
             this.game.bonusManager.dispatch({
-                type: 'FIRE/BOOM'
+                type: 'FIRE/RANDOM_TOOL'
             });
         }
     },
