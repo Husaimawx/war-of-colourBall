@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "BoomTool",
+    "_name": "AimTool",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -80,6 +80,16 @@
     "_id": ""
   },
   {
+    "__type__": "efea4n1CuZJL7XF8U9B5Vjm",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_id": ""
+  },
+  {
     "__type__": "cc.Sprite",
     "_name": "",
     "_objFlags": 0,
@@ -90,7 +100,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "646ad25c-0e24-4622-81b9-9f3deed7a203"
+      "__uuid__": "a3f777cd-7118-4f95-8d8d-74c752d8643b"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -105,16 +115,6 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "49bb0GQCfpAx7DnBzopg/OP",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
     "_id": ""
   },
   {
@@ -170,9 +170,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "90b34669-7741-4774-9e10-d13fd2d4983e"
+      "__uuid__": "31793500-ce15-45d0-98a1-9e4bc807e873"
     },
-    "fileId": "73CoKCNFFKc72+80JG7Wbd",
+    "fileId": "afYJW7totLWKZ5F9tpkxym",
     "sync": false
   }
 ]

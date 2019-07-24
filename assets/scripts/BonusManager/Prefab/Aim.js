@@ -1,28 +1,27 @@
 
 cc.Class({
     extends: cc.Component,
-    properties: {
-        inTime: 0.15,
-        outTime: 0.75,
-    },
 
-    update(dt) {
-        this.node.position = cc.Vec2.ZERO;
+    properties: {
+        inTime: 1.5,
     },
 
     reuse(manager) {
         this.enabled = true;
         this.manager = manager;
-        let fadein = cc.fadeIn(this.inTime);
-        let fadeout = cc.fadeOut(this.outTime);
-        let action = cc.sequence(fadein, fadeout);
+        this.collider = this.node.getComponent(cc.PhysicsCircleCollider);
+        this.collider.enabled = false;
+        let action = cc.sequence(
+            cc.place(cc.v2(-100, -100)),
+            cc.moveTo(this.inTime, cc.Vec2.ZERO).easing(cc.easeCubicActionOut())
+        )
         this.node.runAction(action);
         this.scheduleOnce(() => {
             this.manager.dispatch({
-                type: 'RECYCLE/BOOM',
+                type: 'RECYCLE/AIM',
                 node: this.node
             });
-        }, this.inTime + this.outTime)
+        }, this.inTime)
     },
 
     unuse() {
@@ -41,4 +40,5 @@ cc.Class({
                 break;
         }
     },
+
 });

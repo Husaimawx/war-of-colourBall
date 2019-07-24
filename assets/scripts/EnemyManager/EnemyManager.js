@@ -4,7 +4,8 @@ cc.Class({
     properties: {
         prefab: cc.Prefab,
         enemyInvincible: cc.SpriteFrame,
-        enemyNumb: 0,
+        maxEnemy: 50,
+        enemyCD: 4,
     },
 
     init() {
@@ -12,6 +13,7 @@ cc.Class({
         this.game = this.canvas.getComponent('Game');
         this.target = this.game.player;
         this.enemyPool = new cc.NodePool('Enemy');
+        this.enemys = [];
         this.enemyColor = [ //https://www.sohu.com/a/125413399_101278
             cc.color(250, 202, 46),
             cc.color(255, 44, 14),
@@ -21,6 +23,11 @@ cc.Class({
             cc.color(216, 0, 102),
             cc.color(202, 160, 102),
         ]
+        this.schedule(() => {
+            if (this.enemys.length < this.maxEnemy) {
+                this.dispatch({type: 'CREATE_ENEMY'});
+            }
+        }, this.enemyCD);
     },
 
     dispatch(action) {
@@ -48,18 +55,17 @@ cc.Class({
         if (pos instanceof cc.Vec2) {
             node.position = pos;
         } else {
-            let pos1 = this.game.randomPos();
-            node.position = pos1;
-            // node.position = this.game.randomPos();
+            node.position = this.game.randomPos();
         }
-        this.enemyNumb++;
 
-        return node;
+        return this.enemys.push(node);
     },
 
     killEnemy(node) {
+        this.enemys = this.enemys.filter(e => {
+            return e.uuid !== node.uuid;
+        })
         this.enemyPool.put(node);
-        this.enemyNumb--;
     },
 
     mergeEnemy(node1, node2) {
@@ -72,7 +78,6 @@ cc.Class({
         this.killEnemy(node1);
         this.killEnemy(node1);
         this.createEnemy(level1 + level2, pos, false);
-
     },
 
     randomColor() {

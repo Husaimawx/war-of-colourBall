@@ -14,13 +14,15 @@ cc.Class({
             return;
         }
         let targetNode = this.manager.target.node;
+        let rigiBody = this.node.getComponent(cc.RigidBody);
         let distance = targetNode.position.sub(this.node.position);
         let direction = distance.clone().normalizeSelf();
-        let realSpeed = distance.mag() < targetNode.height * 2 ?
-            this.speed / 2 :
-            this.speed;
-        let moveVec = direction.mul(realSpeed * dt);
-        this.node.position = this.node.position.add(moveVec);
+        let realSpeed = this.speed;
+        let shouldDamping = distance.mag() / (targetNode.height * 3);
+        if (shouldDamping < 1) {
+            realSpeed *= 0.7 * shouldDamping + 0.3;
+        }
+        rigiBody.linearVelocity = direction.mul(realSpeed);
     },
 
     onDestroy() {

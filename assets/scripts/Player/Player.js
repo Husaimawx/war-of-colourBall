@@ -27,11 +27,11 @@ let Player = cc.Class({
     update(dt) {
         // 转头和移动
         this.node.rotation = this.direction.signAngle(cc.Vec2.RIGHT) / Math.PI * 180 + 90;
+        let rigiBody = this.node.getComponent(cc.RigidBody);
         if (this.isMoving) {
-            this.node.position = new cc.Vec2(
-                this.speed * dt * this.direction.x,
-                this.speed * dt * this.direction.y
-            ).add(this.node.position);
+            rigiBody.linearVelocity = this.direction.clone().mul(this.speed);
+        } else {
+            rigiBody.linearVelocity = cc.Vec2.ZERO;
         }
     },
 
@@ -44,13 +44,13 @@ let Player = cc.Class({
                     type: 'GAME_OVER'
                 })
                 break;
-            case 'Tool':
-                if (otherCollider.node.name === 'BoomTool') {
-                    this.game.bonusManager.dispatch({
-                        type: 'BOOM',
-                    })
-                }
-                break;
+            // case 'Tool':
+            //     if (otherCollider.node.name === 'BoomTool') {
+            //         this.game.bonusManager.dispatch({
+            //             type: 'BOOM',
+            //         })
+            //     }
+            //     break;
             default: break;
         }
     },

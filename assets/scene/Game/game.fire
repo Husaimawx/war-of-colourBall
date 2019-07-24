@@ -1698,11 +1698,6 @@
     "enemyManager": {
       "__id__": 44
     },
-    "maxBullet": 50,
-    "maxEnemy": 50,
-    "maxTool": 10,
-    "enemyCD": 4,
-    "toolCD": 5,
     "_id": "b2kmKdmtFMUbkHWpVKq4Qj"
   },
   {
@@ -1719,9 +1714,17 @@
     "boomTool": {
       "__uuid__": "90b34669-7741-4774-9e10-d13fd2d4983e"
     },
+    "aim": {
+      "__uuid__": "77acee74-c9aa-435c-86a3-069ad8957f2f"
+    },
+    "aimTool": {
+      "__uuid__": "31793500-ce15-45d0-98a1-9e4bc807e873"
+    },
     "toolSpeed": 20,
     "toolAngleSpeed": 25,
     "toolNumb": 0,
+    "maxTool": 5,
+    "toolCD": 5,
     "_id": "18adaPX6hND4bK/WJ8YGRH"
   },
   {
@@ -1798,7 +1801,8 @@
     "enemyInvincible": {
       "__uuid__": "d1c356d2-b88b-4253-a4ec-401226b3b477"
     },
-    "enemyNumb": 0,
+    "maxEnemy": 50,
+    "enemyCD": 4,
     "_id": "5cX15CCvNBE6giZVwJwCVc"
   },
   {

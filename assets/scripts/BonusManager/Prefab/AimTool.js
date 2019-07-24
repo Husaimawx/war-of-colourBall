@@ -23,11 +23,11 @@ cc.Class({
         switch (otherCollider.node.group) {
             case 'Player':
                 this.manager.dispatch({
-                    type: 'RECYCLE/BOOM_TOOL',
+                    type: 'RECYCLE/AIM_TOOL',
                     node: selfCollider.node
                 })
                 this.manager.dispatch({
-                    type: 'FIRE/BOOM',
+                    type: 'FIRE/AIM',
                 })
                 break;
             default: break;

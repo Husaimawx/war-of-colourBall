@@ -3,7 +3,6 @@ const Player = require('Player');
 const Rocker = require('Rocker');
 const Score = require('Score');
 const BonusManager = require('BonusManager');
-// const BulletManager = require('BulletManager');
 const EnemyManager = require('EnemyManager');
 
 cc.Class({
@@ -13,15 +12,7 @@ cc.Class({
         player: Player,
         score: Score,
         bonusManager: BonusManager,
-        // bulletManager: BulletManager,
         enemyManager: EnemyManager,
-
-        maxBullet: 50,
-        maxEnemy: 50,
-        maxTool: 10,
-        // bulletCD: 1,
-        enemyCD: 4,
-        toolCD: 5,
     },
 
     onLoad() {
@@ -30,33 +21,23 @@ cc.Class({
             return;
         }
         this.gameManager = cc.find('GameManager').getComponent('GameManager');
-
-        this.player.init();
-        this.score.init();
-        this.rocker.init();
-        this.bonusManager.init();
-        this.enemyManager.init();
-
-        this.schedule(() => {
-            if (this.enemyManager.enemyNumb < this.maxEnemy) {
-                this.enemyManager.dispatch({
-                    type: 'CREATE_ENEMY'
-                });
-            }
-        }, this.enemyCD);
-        this.schedule(() => {
-            if (this.bonusManager.toolNumb < this.maxTool) {
-                this.bonusManager.dispatch({
-                    type: 'BOOM_TOOL'
-                });
-            }
-        }, this.toolCD);
+        this.pluginInit([
+            this.player,
+            this.enemyManager,
+            this.bonusManager,
+            this.score,
+            this.rocker,
+        ])
 
         // 物理系统启动
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2();
-        let Bits = cc.PhysicsManager.DrawBits;
+    },
 
+    pluginInit(plugins) {
+        for (let plugin of plugins) {
+            plugin.init();
+        }
     },
 
     dispatch(action) {
