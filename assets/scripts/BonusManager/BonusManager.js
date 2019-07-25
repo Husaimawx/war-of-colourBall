@@ -151,31 +151,7 @@ cc.Class({
         }
         this.scheduleOnce(() => {
             cc.audioEngine.playEffect(this.arrowAudio);
-        }, 1 + 0.03 * 8);
-        // this.scheduleOnce(() => {
-        //     cc.audioEngine.playEffect(this.arrowAudio);
-        // }, 1 + 0.03 * 8);
-        // const f = (delay) => {
-        //     this.schedule(() => {
-        //         let direction = cc.v2(
-        //             Math.sin(i * 45 / 180 * Math.PI),
-        //             Math.cos(i * 45 / 180 * Math.PI),
-        //         )
-        //         let arrowNode = this.create(
-        //             this.arrowPool,
-        //             this.arrow,
-        //             parent = this.canvas,
-        //             direction = direction,
-        //         )
-        //         i++;
-        //     }, 0.03, 7, delay);
-        //     this.scheduleOnce(() => {
-        //         cc.audioEngine.playEffect(this.arrowAudio);
-        //     }, 1 + 0.03 * 8);
-        // }
-        // f(0);
-        // f(1.5);
-        // f(3);
+        }, 1);
     },
 
     recycle(action) {
