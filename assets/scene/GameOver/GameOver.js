@@ -3,21 +3,29 @@ cc.Class({
     extends: cc.Component,
     properties: {
         scoreDisplay: cc.Label,
+        gameOverAudio: {
+            type: cc.AudioClip,
+            default: null,
+        },
     },
 
     onLoad() {
-        this.gameManager = cc.find('GameManager').getComponent('GameManager');
-        if (!this.gameManager) {
+        if (!cc.find('GameManager')) {
             cc.director.loadScene('login');
+            return;
         }
-        let score = this.gameManager.finalScore;
-        this.scoreDisplay.string = `Score: ${score}`;
+        this.gm = cc.find('GameManager').getComponent('GameManager');
+        let score = this.gm.finalScore;
+        this.scoreDisplay.string = `最终得分: ${score}`;
+
+        cc.audioEngine.stopMusic();
+        cc.audioEngine.playEffect(this.gameOverAudio);
     },
 
     clicked() {
-        this.gameManager.dispatch({
+        this.gm.dispatch({
             type: 'GAME_START'
         })
     },
-    
+
 });

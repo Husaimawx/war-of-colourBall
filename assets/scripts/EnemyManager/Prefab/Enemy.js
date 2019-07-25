@@ -34,6 +34,7 @@ cc.Class({
         this.manager = manager;
         this.level = level;
         this.invincible = invincible;
+        this.speed = this.manager.enemySpeed;
         this.rigiBody.linearVelocity = cc.Vec2.ZERO;
         this.color = this.manager.randomColor();
         this.radius = this.baseRadius + this.level;

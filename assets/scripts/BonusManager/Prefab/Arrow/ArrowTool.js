@@ -12,11 +12,18 @@ cc.Class({
         ).normalizeSelf();
         this.rigiBody.linearVelocity = direction.mul(manager.toolSpeed);
         this.rigiBody.angularVelocity = manager.toolAngleSpeed;
+        this.scheduleOnce(() => {
+            manager.dispatch({
+                type: 'RECYCLE/ARROW_TOOL',
+                node: this.node
+            })
+        }, 10)
     },
 
     unuse() {
         this.enabled = false;
         this.node.stopAllActions();
+        this.unscheduleAllCallbacks();
     },
 
     onBeginContact(contact, selfCollider, otherCollider) {

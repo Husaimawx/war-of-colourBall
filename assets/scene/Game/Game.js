@@ -20,7 +20,7 @@ cc.Class({
             cc.director.loadScene('login');
             return;
         }
-        this.gameManager = cc.find('GameManager').getComponent('GameManager');
+        this.gm = cc.find('GameManager').getComponent('GameManager');
         this.pluginInit([
             this.player,
             this.enemyManager,
@@ -32,6 +32,11 @@ cc.Class({
         // 物理系统启动
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2();
+
+        // 启动背景音乐
+        if (!cc.audioEngine.isMusicPlaying()) {
+            this.gm.bgmID = cc.audioEngine.playMusic(this.gm.bgm.clip, true);
+        }
     },
 
     pluginInit(plugins) {
@@ -58,15 +63,11 @@ cc.Class({
             left + (right - left) * Math.random(),
             bottom + (top - bottom) * Math.random()
         )
-        // let playerNode = this.player.node;
-        // if (avoidPlayer && pos.sub(playerNode.position).mag() < playerNode.height * 2) {
-        //     return this.randomPos();
-        // }
         return pos;
     },
 
     gameOver() {
-        this.gameManager.dispatch({
+        this.gm.dispatch({
             type: 'GAME_OVER',
             score: this.score.scoreNow
         })

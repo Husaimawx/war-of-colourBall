@@ -11,13 +11,7 @@ let Player = cc.Class({
         this.game = this.canvas.getComponent('Game');
         this.direction = cc.Vec2.UP;
         this.node.position = cc.v2(0, -1000);
-        let action =  cc.moveTo(0.5, cc.v2(0, 0));
-        // let action = cc.sequence(
-            // cc.fadeTo(0.5, 127),
-            // cc.fadeTo(0.5, 255),
-            // cc.fadeIn(2),
-            // cc.rotateBy(2, 720),
-        // )
+        let action =  cc.moveTo(0.6, cc.v2(0, -150));
         this.node.runAction(action);
     },
 

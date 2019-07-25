@@ -3,6 +3,11 @@ cc.Class({
     extends: cc.Component,
     properties: {
         finalScore: 0,
+        bgm: {
+            type: cc.AudioSource,
+            default: null
+        },
+        bgmID: 0,
     },
 
     onLoad() {
@@ -11,9 +16,9 @@ cc.Class({
 
     dispatch(action) {
         switch (action.type) {
-            case 'LOG_IN':
-                this.login();
-                break;
+            // case 'LOG_IN':
+            // this.login();
+            // break;
             case 'GAME_START':
                 this.game();
                 break;
@@ -24,20 +29,18 @@ cc.Class({
         }
     },
 
-    login() {
-        cc.director.loadScene('login');
-        cc.director.preloadScene("game");
-    },
+    // login() {
+    //     cc.director.loadScene('login');
+    //     cc.director.preloadScene("game");
+    // },
 
     game() {
         cc.director.loadScene('game');
-        cc.director.preloadScene("gameOver");
     },
 
     gameOver(score) {
         this.finalScore = score;
         cc.director.loadScene('gameOver');
-        cc.director.preloadScene("game");
     },
 
 });
