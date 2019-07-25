@@ -5,8 +5,10 @@ cc.Class({
         prefab: cc.Prefab,
         enemyInvincible: cc.SpriteFrame,
         maxEnemy: 40,
+        enemySpeed: 80,
+        maxEnemySpeed: 200,
         enemyCD: 2,
-        minEnemyCD: 1,
+        minEnemyCD: 0.6,
     },
 
     set enemyCD(cd) {
@@ -42,7 +44,11 @@ cc.Class({
                 this.mergeEnemy(action.node1, action.node2);
                 break;
             case 'CHANGE_CD':
-                this.scheduleRenderEnemy(action.enemyCD);
+                this.changeCD(action.enemyCD);
+                this.scheduleRenderEnemy();
+                break;
+            case 'CHANGE_SPEED':
+                this.changeSpeed(action.enemySpeed);
                 break;
             default: break;
         }
@@ -54,14 +60,9 @@ cc.Class({
         }
     },
 
-    scheduleRenderEnemy(cd = this.enemyCD) {
-        cc.log('scheduleRenderEnemy');
-        cc.log('interval: ' + cd);
+    scheduleRenderEnemy() {
         this.unscheduleAllCallbacks();
-        this.schedule(this.render, cd);
-        cc.log('old EnemyCD: ' + this.enemyCD);
-        this.enemyCD = cd > this.minEnemyCD ? cd : this.enemyCD;
-        cc.log('new EnemyCD: ' + this.enemyCD);
+        this.schedule(this.render, this.enemyCD);
     },
 
     createEnemy(level = 1, pos = null, invincible = true) {
@@ -93,20 +94,22 @@ cc.Class({
         })
     },
 
-    // mergeEnemy(node1, node2) {
-    //     if (!node1 || !node2 || node1.uuid < node2.uuid) {
-    //         return;
-    //     }
-    //     let level1 = node1.getComponent('Enemy').level;
-    //     let level2 = node1.getComponent('Enemy').level;
-    //     let pos = level1 > level2 ? node1.position : node1.position;
-    //     this.killEnemy(node1);
-    //     this.killEnemy(node1);
-    //     this.createEnemy(level1 + level2, pos, false);
-    // },
-
     randomColor() {
         let randomNumb = Math.floor(Math.random() * this.enemyColor.length);
         return this.enemyColor[randomNumb];
+    },
+
+    changeCD(cd) {
+        if (cd < this.minEnemyCD) {
+            return;
+        }
+        this.enemyCD = cd;
+    },
+
+    changeSpeed(value) {
+        if (value > this.maxEnemySpeed) {
+            return;
+        }
+        this.enemySpeed = value;
     },
 });

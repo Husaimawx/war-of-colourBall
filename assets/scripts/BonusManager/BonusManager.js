@@ -115,14 +115,11 @@ cc.Class({
             );
             node.position = this.game.randomPos();
             cc.audioEngine.playEffect(this.boomAudio);
-        }, 0.5, 4, 0.5);
+        }, 0.5, 3, 0.5);
     },
 
     fireAim() {
         for (let eNode of this.game.enemyManager.enemys) {
-            // if (Math.random() > 0.5) {
-            //     return;
-            // }
             let e = eNode.getComponent('Enemy');
             e.invincible = true;
             e.unscheduleAllCallbacks();

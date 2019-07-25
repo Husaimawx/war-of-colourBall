@@ -20,7 +20,6 @@ cc.Class({
             cc.director.loadScene('login');
             return;
         }
-        cc.log('there');
         this.gm = cc.find('GameManager').getComponent('GameManager');
         this.pluginInit([
             this.player,
@@ -64,10 +63,6 @@ cc.Class({
             left + (right - left) * Math.random(),
             bottom + (top - bottom) * Math.random()
         )
-        // let playerNode = this.player.node;
-        // if (avoidPlayer && pos.sub(playerNode.position).mag() < playerNode.height * 2) {
-        //     return this.randomPos();
-        // }
         return pos;
     },
 

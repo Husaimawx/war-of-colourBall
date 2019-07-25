@@ -3,7 +3,10 @@ cc.Class({
     extends: cc.Component,
     properties: {
         finalScore: 0,
-        bgm: cc.AudioSource,
+        bgm: {
+            type: cc.AudioSource,
+            default: null
+        },
         bgmID: 0,
     },
 
