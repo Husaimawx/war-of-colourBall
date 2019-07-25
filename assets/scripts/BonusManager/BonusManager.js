@@ -126,36 +126,54 @@ cc.Class({
             let aimNode = this.create(this.aimPool, this.aim, eNode);
             cc.audioEngine.playEffect(this.aimAudio1);
             cc.director.getScheduler().pauseTarget(this.game.enemyManager);
-            this.scheduleOnce(() => {
-                cc.director.getScheduler().resumeTarget(this.game.enemyManager);
-            }, 3);
-            this.scheduleOnce(() => {
-                cc.audioEngine.playEffect(this.aimAudio2);
-            }, 1.5);
         }
+        this.scheduleOnce(() => {
+            cc.director.getScheduler().resumeTarget(this.game.enemyManager);
+        }, 3);
+        this.scheduleOnce(() => {
+            cc.audioEngine.playEffect(this.aimAudio2);
+        }, 1.5);
     },
 
     fireArrow() {
         let i = 0;
-        const f = (delay) => {
-            this.schedule(() => {
-                let direction = cc.v2(
-                    Math.sin(i * 45 / 180 * Math.PI),
-                    Math.cos(i * 45 / 180 * Math.PI),
-                )
-                let arrowNode = this.create(
-                    this.arrowPool,
-                    this.arrow,
-                    parent = this.canvas,
-                    direction = direction,
-                )
-                i++;
-            }, 0.03, 7, delay);
-            this.scheduleOnce(() => {
-                cc.audioEngine.playEffect(this.arrowAudio);
-            }, 1 + 0.03 * 8);
+        for (let i = 0; i < 8; i++) {
+            let direction = cc.v2(
+                Math.sin(i * 45 / 180 * Math.PI),
+                Math.cos(i * 45 / 180 * Math.PI),
+            )
+            let arrowNode = this.create(
+                this.arrowPool,
+                this.arrow,
+                parent = this.canvas,
+                direction = direction,
+            )
         }
-        f(0);
+        this.scheduleOnce(() => {
+            cc.audioEngine.playEffect(this.arrowAudio);
+        }, 1 + 0.03 * 8);
+        // this.scheduleOnce(() => {
+        //     cc.audioEngine.playEffect(this.arrowAudio);
+        // }, 1 + 0.03 * 8);
+        // const f = (delay) => {
+        //     this.schedule(() => {
+        //         let direction = cc.v2(
+        //             Math.sin(i * 45 / 180 * Math.PI),
+        //             Math.cos(i * 45 / 180 * Math.PI),
+        //         )
+        //         let arrowNode = this.create(
+        //             this.arrowPool,
+        //             this.arrow,
+        //             parent = this.canvas,
+        //             direction = direction,
+        //         )
+        //         i++;
+        //     }, 0.03, 7, delay);
+        //     this.scheduleOnce(() => {
+        //         cc.audioEngine.playEffect(this.arrowAudio);
+        //     }, 1 + 0.03 * 8);
+        // }
+        // f(0);
         // f(1.5);
         // f(3);
     },
