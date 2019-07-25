@@ -44,10 +44,10 @@ cc.Class({
     },
 
     addScore(score = 1) {
-        if ((this.scoreNow + score) / 10 % 1 === 0) {
+        if ((this.scoreNow + score) / 5 % 1 === 0) {
             this.text2.node.runAction(this.action);
         }
-        if (Math.floor(this.scoreNow / 20) < Math.floor((this.scoreNow + score) / 20)) {
+        if (Math.floor(this.scoreNow / 5) < Math.floor((this.scoreNow + score) / 5)) {
             this.game.bonusManager.dispatch({
                 type: 'FIRE/RANDOM_TOOL'
             });

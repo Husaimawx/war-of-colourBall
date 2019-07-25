@@ -5,10 +5,30 @@ cc.Class({
     properties: {
         boom: cc.Prefab,
         boomTool: cc.Prefab,
+        boomAudio: {
+            type: cc.AudioClip,
+            default: null,
+        },
+
         aim: cc.Prefab,
         aimTool: cc.Prefab,
+        aimAudio1: {
+            type: cc.AudioClip,
+            default: null,
+        },
+        aimAudio2: {
+            type: cc.AudioClip,
+            default: null,
+        },
+
         arrow: cc.Prefab,
         arrowTool: cc.Prefab,
+        arrowAudio: {
+            type: cc.AudioClip,
+            default: null,
+        },
+
+
         toolSpeed: 20,
         toolAngleSpeed: 25,
         toolNumb: 0,
@@ -85,6 +105,7 @@ cc.Class({
                 this.boom,
                 this.game.player.node
             );
+            cc.audioEngine.playEffect(this.boomAudio);
         }, 0.8, 2, 0);
         this.schedule(() => {
             let node = this.create(
@@ -93,19 +114,27 @@ cc.Class({
                 this.canvas
             );
             node.position = this.game.randomPos();
+            cc.audioEngine.playEffect(this.boomAudio);
         }, 0.5, 4, 0.5);
     },
 
     fireAim() {
         for (let eNode of this.game.enemyManager.enemys) {
+            // if (Math.random() > 0.5) {
+            //     return;
+            // }
             let e = eNode.getComponent('Enemy');
             e.invincible = true;
             e.unscheduleAllCallbacks();
             let aimNode = this.create(this.aimPool, this.aim, eNode);
+            cc.audioEngine.playEffect(this.aimAudio1);
             cc.director.getScheduler().pauseTarget(this.game.enemyManager);
             this.scheduleOnce(() => {
                 cc.director.getScheduler().resumeTarget(this.game.enemyManager);
             }, 3);
+            this.scheduleOnce(() => {
+                cc.audioEngine.playEffect(this.aimAudio2);
+            }, 1.5);
         }
     },
 
@@ -125,10 +154,13 @@ cc.Class({
                 )
                 i++;
             }, 0.03, 7, delay);
+            this.scheduleOnce(() => {
+                cc.audioEngine.playEffect(this.arrowAudio);
+            }, 1 + 0.03 * 8);
         }
         f(0);
-        f(1.5);
-        f(3);
+        // f(1.5);
+        // f(3);
     },
 
     recycle(action) {
@@ -173,12 +205,6 @@ cc.Class({
         node.position = this.game.randomPos();
         node.setParent(this.canvas);
         this.toolNumb++;
-        this.scheduleOnce(() => {
-            node.runAction(cc.fadeTo(10, 127));
-            this.scheduleOnce(() => {
-                pool.put(node);
-            }, 10)
-        }, 15)
     },
 
 });

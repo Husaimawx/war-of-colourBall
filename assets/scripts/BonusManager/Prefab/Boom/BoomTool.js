@@ -12,11 +12,22 @@ cc.Class({
         ).normalizeSelf();
         this.rigiBody.linearVelocity = direction.mul(manager.toolSpeed);
         this.rigiBody.angularVelocity = manager.toolAngleSpeed;
+        this.scheduleOnce(() => {
+            this.node.runAction(cc.fadeTo(10, 127));
+            this.scheduleOnce(() => {
+                // manager.boomToolPool.put(this.node);
+                manager.dispatch({
+                    type: 'RECYCLE/BOOM_TOOL',
+                    node: this.node
+                })
+            }, 10)
+        }, 15)
     },
 
     unuse() {
         this.enabled = false;
         this.node.stopAllActions();
+        this.unscheduleAllCallbacks();
     },
 
     onBeginContact(contact, selfCollider, otherCollider) {
