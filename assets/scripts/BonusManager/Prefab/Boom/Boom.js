@@ -7,10 +7,10 @@ cc.Class({
     },
 
     update(dt) {
-        if (!!this.node.parent && this.node.parent.name === 'Canvas') {
-            return;
+        if (!!this.node.parent && this.node.parent.name === 'Player') {
+            this.node.position = cc.Vec2.ZERO;
+            // return;
         }
-        this.node.position = cc.Vec2.ZERO;
     },
 
     reuse(manager, parent) {

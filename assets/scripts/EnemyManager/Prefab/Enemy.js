@@ -2,7 +2,7 @@
 cc.Class({
     extends: cc.Component,
     properties: {
-        speed: 100,
+        speed: 80,
         level: 1,
         maxLevel: 20,
         baseRadius: 8,
@@ -16,11 +16,11 @@ cc.Class({
         }
         let targetNode = this.manager.target.node;
         let distance = targetNode.position.sub(this.node.position);
-        let direction = distance.clone().normalizeSelf();
+        let direction = distance.normalize();
         let realSpeed = this.speed;
-        let shouldDamping = distance.mag() / (targetNode.height * 3);
+        let shouldDamping = distance.mag() / (targetNode.height * 4);
         if (shouldDamping < 1) {
-            realSpeed *= 0.7 * shouldDamping + 0.3;
+            realSpeed *= 0.8 * shouldDamping + 0.2;
         }
         this.rigiBody.linearVelocity = direction.mul(realSpeed);
     },
@@ -73,6 +73,7 @@ cc.Class({
     onBeginContact(contact, selfCollider, otherCollider) {
         switch (otherCollider.node.group) {
             case 'Bonus':
+            case 'BonusHasContact':
                 this.manager.dispatch({
                     type: 'KILL_ENEMY',
                     node: selfCollider.node

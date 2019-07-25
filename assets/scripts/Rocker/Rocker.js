@@ -56,7 +56,7 @@ cc.Class({
         if (!distance.equals(cc.Vec2.ZERO)) {
             this.player.dispatch({
                 type: 'SET_DIRECTION',
-                direction: distance.normalizeSelf()
+                direction: distance.normalize()
             });
         }
 

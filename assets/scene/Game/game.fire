@@ -457,13 +457,6 @@
     "text2": {
       "__id__": 7
     },
-    "medalRoot": {
-      "__id__": 8
-    },
-    "medalBaseLine": 1,
-    "pic": {
-      "__uuid__": "5450b269-bc69-44a2-8ae3-e9dbf728ca46"
-    },
     "scoreNow": 0,
     "oldScore": 0,
     "_id": "6eDzIKbc9FUo1mjOSCaPxr"
@@ -1703,11 +1696,17 @@
     "aimTool": {
       "__uuid__": "31793500-ce15-45d0-98a1-9e4bc807e873"
     },
+    "arrow": {
+      "__uuid__": "f8a85e91-d43a-48e3-b3dd-85df24cb7db1"
+    },
+    "arrowTool": {
+      "__uuid__": "c91842a1-7da9-44a8-b02c-a92ebdbe121b"
+    },
     "toolSpeed": 20,
     "toolAngleSpeed": 25,
     "toolNumb": 0,
     "maxTool": 5,
-    "toolCD": 5,
+    "toolCD": 6,
     "_id": "18adaPX6hND4bK/WJ8YGRH"
   },
   {
@@ -1784,8 +1783,9 @@
     "enemyInvincible": {
       "__uuid__": "d1c356d2-b88b-4253-a4ec-401226b3b477"
     },
-    "maxEnemy": 50,
-    "enemyCD": 4,
+    "maxEnemy": 40,
+    "enemyCD": 2,
+    "minEnemyCD": 1,
     "_id": "5cX15CCvNBE6giZVwJwCVc"
   },
   {

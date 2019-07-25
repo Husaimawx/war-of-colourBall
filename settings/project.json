@@ -19,6 +19,7 @@
       false,
       false,
       null,
+      true,
       true
     ],
     [
@@ -50,7 +51,8 @@
       false,
       false,
       true,
-      false
+      false,
+      true
     ],
     [
       false,
@@ -90,6 +92,18 @@
       false,
       false,
       true
+    ],
+    [
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
     ]
   ],
   "design-resolution-height": 640,
@@ -116,7 +130,8 @@
     "Rocker",
     "Background",
     "Bonus",
-    "Tool"
+    "Tool",
+    "BonusHasContact"
   ],
   "last-module-event-record-time": 1563689666007,
   "simulator-orientation": false,

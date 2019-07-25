@@ -7,11 +7,13 @@ cc.Class({
         boomTool: cc.Prefab,
         aim: cc.Prefab,
         aimTool: cc.Prefab,
+        arrow: cc.Prefab,
+        arrowTool: cc.Prefab,
         toolSpeed: 20,
         toolAngleSpeed: 25,
         toolNumb: 0,
         maxTool: 5,
-        toolCD: 5,
+        toolCD: 6,
     },
 
     init() {
@@ -21,7 +23,9 @@ cc.Class({
         this.boomToolPool = new cc.NodePool('BoomTool');
         this.aimPool = new cc.NodePool('Aim');
         this.aimToolPool = new cc.NodePool('AimTool');
-        this.bonus = ['BOOM', 'AIM'];
+        this.arrowPool = new cc.NodePool('Arrow');
+        this.arrowToolPool = new cc.NodePool('ArrowTool');
+        this.bonus = ['BOOM', 'AIM', 'ARROW'];
 
         this.schedule(() => {
             this.randomTool();
@@ -55,11 +59,17 @@ cc.Class({
             case 'AIM':
                 this.fireAim();
                 break;
+            case 'ARROW':
+                this.fireArrow();
+                break;
             case 'BOOM_TOOL':
                 this.createTool(this.boomToolPool, this.boomTool);
                 break;
             case 'AIM_TOOL':
                 this.createTool(this.aimToolPool, this.aimTool);
+                break;
+            case 'ARROW_TOOL':
+                this.createTool(this.arrowToolPool, this.arrowTool);
                 break;
             case 'RANDOM_TOOL':
                 this.randomTool();
@@ -69,11 +79,13 @@ cc.Class({
     },
 
     fireBoom() {
-        let node = this.create(
-            this.boomPool,
-            this.boom,
-            this.game.player.node
-        );
+        this.schedule(() => {
+            let node = this.create(
+                this.boomPool,
+                this.boom,
+                this.game.player.node
+            );
+        }, 0.8, 2, 0);
         this.schedule(() => {
             let node = this.create(
                 this.boomPool,
@@ -87,12 +99,36 @@ cc.Class({
     fireAim() {
         for (let eNode of this.game.enemyManager.enemys) {
             let e = eNode.getComponent('Enemy');
-            if (e.invincible) {
-                return;
-            }
             e.invincible = true;
+            e.unscheduleAllCallbacks();
             let aimNode = this.create(this.aimPool, this.aim, eNode);
+            cc.director.getScheduler().pauseTarget(this.game.enemyManager);
+            this.scheduleOnce(() => {
+                cc.director.getScheduler().resumeTarget(this.game.enemyManager);
+            }, 3);
         }
+    },
+
+    fireArrow() {
+        let i = 0;
+        const f = (delay) => {
+            this.schedule(() => {
+                let direction = cc.v2(
+                    Math.sin(i * 45 / 180 * Math.PI),
+                    Math.cos(i * 45 / 180 * Math.PI),
+                )
+                let arrowNode = this.create(
+                    this.arrowPool,
+                    this.arrow,
+                    parent = this.canvas,
+                    direction = direction,
+                )
+                i++;
+            }, 0.03, 7, delay);
+        }
+        f(0);
+        f(1.5);
+        f(3);
     },
 
     recycle(action) {
@@ -103,6 +139,9 @@ cc.Class({
             case 'AIM':
                 this.aimPool.put(action.node);
                 break;
+            case 'ARROW':
+                this.arrowPool.put(action.node);
+                break;
             case 'BOOM_TOOL': {
                 this.boomToolPool.put(action.node);
                 this.toolNumb--;
@@ -110,6 +149,11 @@ cc.Class({
             }
             case 'AIM_TOOL': {
                 this.aimToolPool.put(action.node);
+                this.toolNumb--;
+                break;
+            }
+            case 'ARROW_TOOL': {
+                this.arrowToolPool.put(action.node);
                 this.toolNumb--;
                 break;
             }
@@ -129,6 +173,12 @@ cc.Class({
         node.position = this.game.randomPos();
         node.setParent(this.canvas);
         this.toolNumb++;
+        this.scheduleOnce(() => {
+            node.runAction(cc.fadeTo(10, 127));
+            this.scheduleOnce(() => {
+                pool.put(node);
+            }, 10)
+        }, 15)
     },
 
 });

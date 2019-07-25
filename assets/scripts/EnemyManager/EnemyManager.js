@@ -4,8 +4,12 @@ cc.Class({
     properties: {
         prefab: cc.Prefab,
         enemyInvincible: cc.SpriteFrame,
-        maxEnemy: 50,
-        enemyCD: 4,
+        maxEnemy: 40,
+        enemyCD: 2,
+        minEnemyCD: 1,
+    },
+
+    set enemyCD(cd) {
     },
 
     init() {
@@ -23,11 +27,7 @@ cc.Class({
             cc.color(216, 0, 102),
             cc.color(202, 160, 102),
         ]
-        this.schedule(() => {
-            if (this.enemys.length < this.maxEnemy) {
-                this.dispatch({ type: 'CREATE_ENEMY' });
-            }
-        }, this.enemyCD);
+        this.scheduleRenderEnemy();
     },
 
     dispatch(action) {
@@ -40,8 +40,28 @@ cc.Class({
                 break;
             case 'MERGE_ENEMY':
                 this.mergeEnemy(action.node1, action.node2);
+                break;
+            case 'CHANGE_CD':
+                this.scheduleRenderEnemy(action.enemyCD);
+                break;
             default: break;
         }
+    },
+
+    render() {
+        if (this.enemys.length < this.maxEnemy) {
+            this.dispatch({ type: 'CREATE_ENEMY' });
+        }
+    },
+
+    scheduleRenderEnemy(cd = this.enemyCD) {
+        cc.log('scheduleRenderEnemy');
+        cc.log('interval: ' + cd);
+        this.unscheduleAllCallbacks();
+        this.schedule(this.render, cd);
+        cc.log('old EnemyCD: ' + this.enemyCD);
+        this.enemyCD = cd > this.minEnemyCD ? cd : this.enemyCD;
+        cc.log('new EnemyCD: ' + this.enemyCD);
     },
 
     createEnemy(level = 1, pos = null, invincible = true) {
@@ -58,6 +78,7 @@ cc.Class({
             node.position = this.game.randomPos();
         }
 
+        this.totalEnemys++;
         return this.enemys.push(node);
     },
 
