@@ -1,6 +1,5 @@
 ## ✨彩球大战
-
-> 游戏介绍：一不小心，就被五颜六色的彩色球包围了！想尽办法消灭他们吧！
+#### 一不小心，就被五颜六色的彩色球包围了！想尽办法消灭他们吧！
 
 <div style="text-align: center">
 <img src="./assets/textures/LOGO.png" width="100" height="100" />
@@ -11,12 +10,12 @@
 
 <br/>
 
-## 📦Core Dependencies
+## 📦开发环境
 * #### [Cocos](https://www.cocos.com/)
 
 <br/>
 
-## 项目结构
+## ⌨️项目结构
 
 ```
 ├─ assets 代码文件夹
