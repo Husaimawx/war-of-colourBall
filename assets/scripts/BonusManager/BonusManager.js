@@ -119,20 +119,23 @@ cc.Class({
     },
 
     fireAim() {
+        if (!this.game.enemyManager.enemys.length) {
+            return;
+        }
         for (let eNode of this.game.enemyManager.enemys) {
             let e = eNode.getComponent('Enemy');
             e.invincible = true;
             e.unscheduleAllCallbacks();
             let aimNode = this.create(this.aimPool, this.aim, eNode);
-            cc.audioEngine.playEffect(this.aimAudio1);
-            cc.director.getScheduler().pauseTarget(this.game.enemyManager);
         }
-        this.scheduleOnce(() => {
-            cc.director.getScheduler().resumeTarget(this.game.enemyManager);
-        }, 3);
+        cc.audioEngine.playEffect(this.aimAudio1);
         this.scheduleOnce(() => {
             cc.audioEngine.playEffect(this.aimAudio2);
         }, 1.5);
+        cc.director.getScheduler().pauseTarget(this.game.enemyManager);
+        this.scheduleOnce(() => {
+            cc.director.getScheduler().resumeTarget(this.game.enemyManager);
+        }, 3);
     },
 
     fireArrow() {
@@ -151,7 +154,7 @@ cc.Class({
         }
         this.scheduleOnce(() => {
             cc.audioEngine.playEffect(this.arrowAudio);
-        }, 1 + 0.03 * 8);
+        }, 1);
         // this.scheduleOnce(() => {
         //     cc.audioEngine.playEffect(this.arrowAudio);
         // }, 1 + 0.03 * 8);
