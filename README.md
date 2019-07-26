@@ -10,9 +10,9 @@
 
 <br/>
 
-## 📦开发环境
-* #### [Cocos](https://www.cocos.com/)
-
+## 📦开发
+#### 项目框架：[Cocos Creator](https://www.cocos.com/)
+#### 开发者（仅一人）：黄浩鹏 2017011217
 <br/>
 
 ## ⌨️项目结构
