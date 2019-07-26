@@ -34,6 +34,8 @@ cc.Class({
         if (!cc.audioEngine.isMusicPlaying()) {
             this.gm.bgmID = cc.audioEngine.playMusic(this.gm.bgm.clip, true);
         }
+
+        cc.director.preloadScene("game");
     },
 
     touchAtCanvas(touchAtGlobal) {

@@ -29,8 +29,13 @@ cc.Class({
         ])
 
         // 物理系统启动
-        cc.director.getPhysicsManager().enabled = true;
-        cc.director.getPhysicsManager().gravity = cc.v2();
+        let pm = cc.director.getPhysicsManager();
+        pm.enabled = true;
+        pm.gravity = cc.v2();
+        pm.enabledAccumulator = true;
+        pm.FIXED_TIME_STEP = 1 / 30;
+        pm.VELOCITY_ITERATIONS = 8;
+        pm.POSITION_ITERATIONS = 8;
 
         // 启动背景音乐
         if (!cc.audioEngine.isMusicPlaying()) {
