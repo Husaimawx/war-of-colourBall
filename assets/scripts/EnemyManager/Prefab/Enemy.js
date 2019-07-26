@@ -1,4 +1,3 @@
-
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -80,17 +79,6 @@ cc.Class({
                     node: selfCollider.node
                 });
                 break;
-            // case 'Enemy':
-            //     if (selfCollider.node.getComponent('Enemy').level > this.maxLevel ||
-            //         otherCollider.node.getComponent('Enemy').level > this.maxLevel) {
-            //         return;
-            //     }
-            //     this.manager.dispatch({
-            //         type: 'MERGE_ENEMY',
-            //         node1: selfCollider.node,
-            //         node2: otherCollider.node,
-            //     });
-            //     break;
             default: break;
         }
     },

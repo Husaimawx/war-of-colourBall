@@ -15,9 +15,6 @@
     "_children": [
       {
         "__id__": 2
-      },
-      {
-        "__id__": 19
       }
     ],
     "_active": true,
@@ -44,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.4671875,
-      "y": 0.4671875,
+      "x": 0.54375,
+      "y": 0.54375,
       "z": 1
     },
     "_quat": {
@@ -74,20 +71,17 @@
         "__id__": 5
       },
       {
-        "__id__": 7
-      },
-      {
-        "__id__": 15
+        "__id__": 13
       }
     ],
     "_active": true,
     "_level": 0,
     "_components": [
       {
-        "__id__": 17
+        "__id__": 15
       },
       {
-        "__id__": 18
+        "__id__": 16
       }
     ],
     "_prefab": null,
@@ -224,93 +218,6 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "label",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 2
-    },
-    "_children": [],
-    "_active": false,
-    "_level": 1,
-    "_components": [
-      {
-        "__id__": 6
-      }
-    ],
-    "_prefab": null,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 341.64,
-      "height": 120
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_position": {
-      "__type__": "cc.Vec3",
-      "x": 16,
-      "y": -48,
-      "z": 0
-    },
-    "_scale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_quat": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "groupIndex": 0,
-    "_id": "e9itQI+IJMYYIXvXdcu3+N"
-  },
-  {
-    "__type__": "cc.Label",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 5
-    },
-    "_enabled": true,
-    "_useOriginalSize": false,
-    "_string": "胜败乃兵家常事\n大侠请重新来过哦~",
-    "_N$string": "胜败乃兵家常事\n大侠请重新来过哦~",
-    "_fontSize": 40,
-    "_lineHeight": 60,
-    "_enableWrapText": true,
-    "_N$file": {
-      "__uuid__": "7db56241-ad30-4645-9649-fe814d78adcb"
-    },
-    "_isSystemFontUsed": false,
-    "_spacingX": 0,
-    "_batchAsBitmap": false,
-    "_N$horizontalAlign": 1,
-    "_N$verticalAlign": 1,
-    "_N$fontFamily": "Arial",
-    "_N$overflow": 0,
-    "_N$cacheMode": 0,
-    "_id": "93E4vk6H5EZL+uN0sf6hjy"
-  },
-  {
-    "__type__": "cc.Node",
     "_name": "button",
     "_objFlags": 0,
     "_parent": {
@@ -318,14 +225,14 @@
     },
     "_children": [
       {
-        "__id__": 8
+        "__id__": 6
       }
     ],
     "_active": true,
     "_level": 1,
     "_components": [
       {
-        "__id__": 13
+        "__id__": 11
       }
     ],
     "_prefab": null,
@@ -378,21 +285,21 @@
     "_name": "Background",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 7
+      "__id__": 5
     },
     "_children": [
       {
-        "__id__": 9
+        "__id__": 7
       }
     ],
     "_active": true,
     "_level": 2,
     "_components": [
       {
-        "__id__": 11
+        "__id__": 9
       },
       {
-        "__id__": 12
+        "__id__": 10
       }
     ],
     "_prefab": null,
@@ -445,14 +352,14 @@
     "_name": "Label",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 8
+      "__id__": 6
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 10
+        "__id__": 8
       }
     ],
     "_prefab": null,
@@ -505,7 +412,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 9
+      "__id__": 7
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -530,7 +437,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 8
+      "__id__": 6
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -558,7 +465,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 8
+      "__id__": 6
     },
     "_enabled": true,
     "alignMode": 0,
@@ -585,14 +492,14 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 7
+      "__id__": 5
     },
     "_enabled": true,
     "duration": 0.1,
     "zoomScale": 1.2,
     "clickEvents": [
       {
-        "__id__": 14
+        "__id__": 12
       }
     ],
     "_N$interactable": true,
@@ -660,7 +567,7 @@
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
     },
     "_N$target": {
-      "__id__": 8
+      "__id__": 6
     },
     "_id": "cbIbJgvLxJy4Y6/9LmXypt"
   },
@@ -686,7 +593,7 @@
     "_level": 1,
     "_components": [
       {
-        "__id__": 16
+        "__id__": 14
       }
     ],
     "_prefab": null,
@@ -739,7 +646,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 15
+      "__id__": 13
     },
     "_enabled": true,
     "_cullingMask": 4294967295,
@@ -788,83 +695,5 @@
       "__uuid__": "69ae4b44-9cd9-48d3-91ae-bae6dda09b79"
     },
     "_id": "b3FTUfEXdBQLHDGcmF/Q6X"
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "gameOverEffect",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 1
-    },
-    "_children": [],
-    "_active": false,
-    "_level": 1,
-    "_components": [
-      {
-        "__id__": 20
-      }
-    ],
-    "_prefab": null,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_position": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_scale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_rotationX": 0,
-    "_rotationY": 0,
-    "_quat": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "groupIndex": 0,
-    "_id": "b6RPysCvdD0bX/sfuyVUNw"
-  },
-  {
-    "__type__": "cc.AudioSource",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 19
-    },
-    "_enabled": true,
-    "_clip": {
-      "__uuid__": "69ae4b44-9cd9-48d3-91ae-bae6dda09b79"
-    },
-    "_volume": 1,
-    "_mute": false,
-    "_loop": false,
-    "playOnLoad": false,
-    "preload": false,
-    "_id": "82CF0pg/hLA6qeKuKL2Aa6"
   }
 ]

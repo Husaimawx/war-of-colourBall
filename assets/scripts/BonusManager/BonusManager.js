@@ -1,8 +1,13 @@
 
 cc.Class({
     extends: cc.Component,
-
     properties: {
+        toolSpeed: 20,
+        toolAngleSpeed: 25,
+        toolNumb: 0,
+        maxTool: 5,
+        toolCD: 6,
+        
         boom: cc.Prefab,
         boomTool: cc.Prefab,
         boomAudio: {
@@ -27,25 +32,18 @@ cc.Class({
             type: cc.AudioClip,
             default: null,
         },
-
-
-        toolSpeed: 20,
-        toolAngleSpeed: 25,
-        toolNumb: 0,
-        maxTool: 5,
-        toolCD: 6,
     },
 
     init() {
         this.canvas = cc.find('Canvas');
         this.game = this.canvas.getComponent('Game');
-        this.boomPool = new cc.NodePool('Boom');
-        this.boomToolPool = new cc.NodePool('BoomTool');
-        this.aimPool = new cc.NodePool('Aim');
-        this.aimToolPool = new cc.NodePool('AimTool');
-        this.arrowPool = new cc.NodePool('Arrow');
-        this.arrowToolPool = new cc.NodePool('ArrowTool');
         this.bonus = ['BOOM', 'AIM', 'ARROW'];
+        this.boomPool = new cc.NodePool('Boom');
+        this.aimPool = new cc.NodePool('Aim');
+        this.arrowPool = new cc.NodePool('Arrow');
+        this.boomToolPool = new cc.NodePool('BoomTool');
+        this.aimToolPool = new cc.NodePool('AimTool');
+        this.arrowToolPool = new cc.NodePool('ArrowTool');
 
         this.schedule(() => {
             this.randomTool();

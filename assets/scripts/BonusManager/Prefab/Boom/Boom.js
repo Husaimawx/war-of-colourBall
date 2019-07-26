@@ -1,4 +1,3 @@
-
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -9,7 +8,6 @@ cc.Class({
     update(dt) {
         if (!!this.node.parent && this.node.parent.name === 'Player') {
             this.node.position = cc.Vec2.ZERO;
-            // return;
         }
     },
 

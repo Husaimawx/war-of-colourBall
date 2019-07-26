@@ -1,4 +1,3 @@
-
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -15,7 +14,6 @@ cc.Class({
         this.node.active = false;
         this.bgRaduis = this.background.width * this.background.scaleX / 2;
 
-        //事件注册
         this.canvas.on('touchstart', this.handleTouchStart, this);
         this.canvas.on('touchmove', this.handleTouchMove, this);
         this.canvas.on('touchend', this.handleTouchEnd, this);

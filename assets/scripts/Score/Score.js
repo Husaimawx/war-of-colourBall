@@ -1,7 +1,5 @@
-
 cc.Class({
     extends: cc.Component,
-
     properties: {
         text1: cc.Label,
         text2: cc.Label,

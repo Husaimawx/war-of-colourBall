@@ -1,4 +1,3 @@
-
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -36,7 +35,6 @@ cc.Class({
             this.gm.bgmID = cc.audioEngine.playMusic(this.gm.bgm.clip, true);
         }
     },
-
 
     touchAtCanvas(touchAtGlobal) {
         return new cc.Vec2(

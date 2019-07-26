@@ -1,7 +1,5 @@
-
 cc.Class({
     extends: cc.Component,
-
     properties: {
         inTime: 1,
         speed: 400,
@@ -26,8 +24,7 @@ cc.Class({
         this.fire = false;
         this.rigiBody = this.node.getComponent(cc.RigidBody);
         this.node.rotation = direction.signAngle(cc.Vec2.RIGHT) / Math.PI * 180 + 90;
-        // let action = cc.rotateBy(this.inTime, 360).easing(cc.easeCubicActionOut());
-        // this.node.runAction(action);
+        
         this.scheduleOnce(() => {
             this.fire = true;
             let d = this.direction.normalize();

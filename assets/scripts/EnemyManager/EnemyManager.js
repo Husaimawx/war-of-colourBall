@@ -1,6 +1,5 @@
 cc.Class({
     extends: cc.Component,
-
     properties: {
         prefab: cc.Prefab,
         enemyInvincible: cc.SpriteFrame,
@@ -25,20 +24,6 @@ cc.Class({
             cc.color(123, 177, 55),
             cc.color(216, 0, 102),
             cc.color(202, 160, 102),
-
-            //http://www.pantone.net.cn/pantone/coloryear.htm?dir=asc&order=&currentPage=1
-            // cc.color(255, 111 , 97,),
-            // cc.color(95, 75, 139),
-            // cc.color(136, 176, 75),
-            // cc.color(246, 202, 201),
-            // cc.color(145, 167, 208),
-            // cc.color(162, 89, 86),
-            // cc.color(182, 105, 163),
-            // cc.color(1, 158, 126),
-            // cc.color(224, 74, 40),
-            // cc.color(22, 90, 123),
-            // cc.color(242, 200, 102),
-            // cc.color(78, 188, 178),
         ]
         this.scheduleRenderEnemy();
     },

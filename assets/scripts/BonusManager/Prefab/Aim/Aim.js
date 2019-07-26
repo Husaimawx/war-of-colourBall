@@ -1,7 +1,5 @@
-
 cc.Class({
     extends: cc.Component,
-
     properties: {
         inTime: 1.5,
     },
