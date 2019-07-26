@@ -19,7 +19,7 @@
 ## 项目结构
 
 ```
-├─ assets 
+├─ assets 代码文件夹
 │  ├─ scene 场景文件夹
 │  │  ├─ Game 主要游戏场景
 │  │  ├─ GameOver 游戏结束场景
