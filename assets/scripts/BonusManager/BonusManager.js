@@ -39,7 +39,7 @@ cc.Class({
     init() {
         this.canvas = cc.find('Canvas');
         this.game = this.canvas.getComponent('Game');
-        this.boomPool = new cc.NodePool('Boom'); //control-js-component
+        this.boomPool = new cc.NodePool('Boom');
         this.boomToolPool = new cc.NodePool('BoomTool');
         this.aimPool = new cc.NodePool('Aim');
         this.aimToolPool = new cc.NodePool('AimTool');
@@ -119,20 +119,23 @@ cc.Class({
     },
 
     fireAim() {
+        if (!this.game.enemyManager.enemys.length) {
+            return;
+        }
         for (let eNode of this.game.enemyManager.enemys) {
             let e = eNode.getComponent('Enemy');
             e.invincible = true;
             e.unscheduleAllCallbacks();
             let aimNode = this.create(this.aimPool, this.aim, eNode);
-            cc.audioEngine.playEffect(this.aimAudio1);
-            cc.director.getScheduler().pauseTarget(this.game.enemyManager);
         }
-        this.scheduleOnce(() => {
-            cc.director.getScheduler().resumeTarget(this.game.enemyManager);
-        }, 3);
+        cc.audioEngine.playEffect(this.aimAudio1);
         this.scheduleOnce(() => {
             cc.audioEngine.playEffect(this.aimAudio2);
         }, 1.5);
+        cc.director.getScheduler().pauseTarget(this.game.enemyManager);
+        this.scheduleOnce(() => {
+            cc.director.getScheduler().resumeTarget(this.game.enemyManager);
+        }, 3);
     },
 
     fireArrow() {
